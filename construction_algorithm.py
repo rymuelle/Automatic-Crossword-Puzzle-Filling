@@ -1,7 +1,8 @@
 from crossword import Crossword
 from abc import ABC, abstractmethod
 from word_reader import WordReader
-from collections import deque, MutableSet
+from collections import deque
+from collections.abc import MutableSet
 from random import choice
 from timer import Timer
 import time
