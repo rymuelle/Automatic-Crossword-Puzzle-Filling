@@ -35,8 +35,8 @@ class BruteForceByChar(ConstructionAlgorithm):
     def _recBruteForceConstruct(curr_let_ind, alphabet, positions, xword, word_list_dict):
         if (curr_let_ind == len(positions)):
             if BruteForceByChar.checkValid(xword, word_list_dict):
-                print("FOUND:")
-                print(xword)
+                # print("FOUND:")
+                # print(xword)
                 return True
             else:
                 return False
@@ -90,15 +90,15 @@ class BruteForceByChar(ConstructionAlgorithm):
         # returns a dictionary with key as len and value as a set of words of that len
         word_list_dict = {}
 
-        with open(pathname + 'wordlists/' + word_list_file + '.txt') as my_file:
+        with open(pathname + 'wordlists/' + word_list_file) as my_file:
             for line in my_file:
                 line = line.strip()
+                word, score = line.split(';')
                 try:
-                    word_list_dict[len(line)].append(line)
+                    word_list_dict[len(word)].append(word.upper())
                 except KeyError:
-                    word_list_dict[len(line)] = []
-                    word_list_dict[len(line)].append(line)
-        return word_list_dict
+                    word_list_dict[len(word)] = []
+                    word_list_dict[len(word)].append(word.upper())
 
 class BruteForceByWord(ConstructionAlgorithm):
     def _recBruteForceConstruct(curr_word_ind, word_list_dict, xword):
@@ -106,12 +106,12 @@ class BruteForceByWord(ConstructionAlgorithm):
             # know that all inserted acrosses are valid so we only check downs
             isValid = BruteForceByWord.checkValid(xword, word_list_dict)
             if isValid:
-                print("FOUND:")
-                print(xword)
+                # print("FOUND:")
+                # print(xword)
                 return True
             else:
-                print("--------")
-                print(xword)
+                # print("--------")
+                # print(xword)
                 return False
         current_across = xword.getAcrosses()[curr_word_ind]
 
@@ -166,14 +166,15 @@ class BruteForceByWord(ConstructionAlgorithm):
         # returns a dictionary with key as len and value as a deque of that len
         word_list_dict = {}
 
-        with open(pathname + 'wordlists/' + word_list_file + '.txt') as my_file:
+        with open(pathname + 'wordlists/' + word_list_file) as my_file:
             for line in my_file:
                 line = line.strip()
+                word, score = line.split(';')
                 try:
-                    word_list_dict[len(line)].append(line)
+                    word_list_dict[len(word)].append(word.upper())
                 except KeyError:
-                    word_list_dict[len(line)] = deque()
-                    word_list_dict[len(line)].append(line)
+                    word_list_dict[len(word)] = []
+                    word_list_dict[len(word)].append(word.upper())
 
         return word_list_dict
 
@@ -369,7 +370,7 @@ class IntelligentLookahead(ConstructionAlgorithm):
         # if grid_words_dict is False, then it won't be able to fill
         grid_words_dict = IntelligentLookahead._buildGridDict(word_list_dict, xword)
         if not grid_words_dict:
-            return False
+            return False, xword
 
         # this list is a stack that keeps track of which words have been
         # inserted in what order
@@ -380,7 +381,7 @@ class IntelligentLookahead(ConstructionAlgorithm):
             # if the program is taking longer than MAX_TIME, quit
             if time.time() - start_time > MAX_TIME:
                 print("Exceeded time limit")
-                return False
+                return False, xword
 
             # find the word with the fewest options that hasn't yet been filled in
             curr_fewest_tup = IntelligentLookahead._findSmallestSet(grid_words_dict, tup_stack)
@@ -406,34 +407,54 @@ class IntelligentLookahead(ConstructionAlgorithm):
             elif min_amount == 0:
                 # if the list is empty, that means we've tried every path
                 if len(tup_stack) == 0:
-                    return False
+                    return False, xword
                 removed_word_tup = tup_stack.pop()
                 removed_word = xword.removeWord(removed_word_tup)
                 IntelligentLookahead._updateGridDictRemoveWord(grid_words_dict, xword, removed_word_tup, removed_word)
 
-            print(xword)
-            print("--------")
-        print("FOUND:")
-        print(xword)
+            # print(xword)
+            # print("--------")
+        # print("FOUND:")
+        # print(xword)
 
         # double check that all inserted words are valid
         for word in xword.getWords():
             if word not in word_list_dict[len(word)]:
                 print("THAT'S NOT A WORD:", word)
 
-        return True
+        return True, xword
 
     def readWordList(word_list_file):
         # returns a dictionary with:
         # key as len and value as a list of uppercase words of that len
         word_list_dict = {}
 
-        with open(pathname + 'wordlists/' + word_list_file + '.txt') as my_file:
+        with open(pathname + 'wordlists/' + word_list_file) as my_file:
             for line in my_file:
                 line = line.strip()
+                word, score = line.split(';')
                 try:
-                    word_list_dict[len(line)].append(line.upper())
+                    word_list_dict[len(word)].append(word.upper())
                 except KeyError:
-                    word_list_dict[len(line)] = []
-                    word_list_dict[len(line)].append(line.upper())
+                    word_list_dict[len(word)] = []
+                    word_list_dict[len(word)].append(word.upper())
         return word_list_dict
+
+
+def open_dict(wordlist_file):
+    word_score_dict = {}
+    with open(pathname + 'wordlists/' + wordlist_file) as my_file:
+        for line in my_file:
+            line = line.strip()
+            word, score = line.split(';')
+            word_score_dict[word] = int(score)
+        return word_score_dict
+    
+def score_xword(xword, wordlist_file):
+        word_score_dict = open_dict(wordlist_file)
+        words = xword.getWords()
+        score = 0
+        for word in words:
+            if word in word_score_dict:
+                score += word_score_dict[word]
+        return score
