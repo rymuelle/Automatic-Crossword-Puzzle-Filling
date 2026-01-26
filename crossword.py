@@ -1,5 +1,6 @@
 import json
 from timer import Timer
+from utils import draw_crossword
 
 class Crossword:
     # Constructor
@@ -392,7 +393,10 @@ class Crossword:
         ret_str = ""
         for line in self.grid:
             if ret_str == "":
-                ret_str = str(line)
+                ret_str = str(line) + ","
             else:
-                ret_str += "\n" + str(line)
+                ret_str += "\n" + str(line) + ","
         return ret_str
+    
+    def draw_crossword(self):
+        draw_crossword(self.grid)

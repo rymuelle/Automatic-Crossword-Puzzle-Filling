@@ -1,4 +1,6 @@
 import random
+from utils import draw_crossword
+from crossword import Crossword
 
 def generate_crossword_template(
     rows=10,
@@ -76,7 +78,15 @@ def generate_crossword_template(
     return grid
 
 if __name__=="__main__":
-    grid = generate_crossword_template(rows=10, cols=10, seed=42, black_fraction=0.)
+    while True:
+        grid = generate_crossword_template(rows=15, cols=15, seed=None, black_fraction=0.2)
 
-    for row in grid:
-        print(row, ",")
+
+        xword = Crossword(15, 15, grid)
+        
+        lengths = [len(x) for x in xword.getAcrosses()] + [len(x) for x in xword.getDowns()]
+        if max(lengths)< 12:
+            xword.draw_crossword()
+            print(min(lengths), max(lengths), sum(lengths)/len(lengths))
+            print(xword)
+            break
