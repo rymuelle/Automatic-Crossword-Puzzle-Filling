@@ -77,6 +77,14 @@ def generate_crossword_template(
 
     return grid
 
+def generate_grid(rows=15, cols=15, seed=None, black_fraction=0.2, max_length=12):
+    while True:
+        grid = generate_crossword_template(rows=rows, cols=cols, seed=seed, black_fraction=black_fraction)
+        xword = Crossword(rows, cols, grid)
+        lengths = [len(x) for x in xword.getAcrosses()] + [len(x) for x in xword.getDowns()]
+        if max(lengths)< 12:
+            return grid, xword
+
 if __name__=="__main__":
     while True:
         grid = generate_crossword_template(rows=15, cols=15, seed=None, black_fraction=0.2)
