@@ -6,6 +6,7 @@ from collections.abc import MutableSet
 from random import choice
 from timer import Timer
 import time
+import random
 
 # Get current pathname
 import os
@@ -363,6 +364,7 @@ class IntelligentLookahead(ConstructionAlgorithm):
         xword = Crossword(rows, cols, empty_grid)
 
         word_list_dict = IntelligentLookahead.readWordList(word_list_file)
+        score_dict = open_dict(word_list_file)
         # for each across/down word, make a list of words that could fit there
         # this will be a dictionary:
         #   Keys will be a tuple, index of word and A/D
@@ -397,7 +399,13 @@ class IntelligentLookahead(ConstructionAlgorithm):
                 tup_stack.append(curr_fewest_tup)
                 smallest_set = grid_words_dict[curr_fewest_tup][-1]
                 # get a random word from the set and remove it from the set
-                word = choice(list(smallest_set))
+                scores = [score_word(s, score_dict)**8 for s in smallest_set]
+                # word = choice(list(smallest_set))
+                try:
+                    word = random.choices(list(smallest_set), weights=scores, k=1)[0]
+                except:
+                    print(scores, word)
+                    test
                 grid_words_dict[curr_fewest_tup][-1].remove(word)
 
                 xword.addWord(curr_fewest_tup, word)
@@ -450,11 +458,18 @@ def open_dict(wordlist_file):
             word_score_dict[word] = int(score)
         return word_score_dict
     
+def score_word(word, score_list_dict):
+    if word in score_list_dict:
+        return score_list_dict[word] + 1
+    return 1
+
 def score_xword(xword, wordlist_file):
         word_score_dict = open_dict(wordlist_file)
         words = xword.getWords()
         score = 0
+        n_words = 0
         for word in words:
             if word in word_score_dict:
                 score += word_score_dict[word]
-        return score
+                n_words += 1
+        return score/n_words
