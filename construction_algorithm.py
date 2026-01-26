@@ -8,6 +8,7 @@ from timer import Timer
 import time
 import random
 
+from scoring import *
 # Get current pathname
 import os
 pathname = os.path.dirname(os.path.abspath(__file__)) + "/"
@@ -399,7 +400,7 @@ class IntelligentLookahead(ConstructionAlgorithm):
                 tup_stack.append(curr_fewest_tup)
                 smallest_set = grid_words_dict[curr_fewest_tup][-1]
                 # get a random word from the set and remove it from the set
-                scores = [score_word(s, score_dict)**8 for s in smallest_set]
+                scores = [score_word(s, score_dict) for s in smallest_set]
                 # word = choice(list(smallest_set))
                 try:
                     word = random.choices(list(smallest_set), weights=scores, k=1)[0]
@@ -449,27 +450,5 @@ class IntelligentLookahead(ConstructionAlgorithm):
         return word_list_dict
 
 
-def open_dict(wordlist_file):
-    word_score_dict = {}
-    with open(pathname + 'wordlists/' + wordlist_file) as my_file:
-        for line in my_file:
-            line = line.strip()
-            word, score = line.split(';')
-            word_score_dict[word] = int(score)
-        return word_score_dict
-    
-def score_word(word, score_list_dict):
-    if word in score_list_dict:
-        return score_list_dict[word] + 1
-    return 1
 
-def score_xword(xword, wordlist_file):
-        word_score_dict = open_dict(wordlist_file)
-        words = xword.getWords()
-        score = 0
-        n_words = 0
-        for word in words:
-            if word in word_score_dict:
-                score += word_score_dict[word]
-                n_words += 1
-        return score/n_words
+    
