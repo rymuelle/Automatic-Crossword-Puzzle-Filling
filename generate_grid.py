@@ -77,24 +77,43 @@ def generate_crossword_template(
 
     return grid
 
-def generate_grid(rows=15, cols=15, seed=None, black_fraction=0.2, max_length=12):
-    while True:
+def _generate_grid(rows=15, cols=15, seed=None, black_fraction=0.2, max_length=12, words_to_insert=[]):
         grid = generate_crossword_template(rows=rows, cols=cols, seed=seed, black_fraction=black_fraction)
+        
         xword = Crossword(rows, cols, grid)
         lengths = [len(x) for x in xword.getAcrosses()] + [len(x) for x in xword.getDowns()]
-        if max(lengths)< 12:
-            return grid, xword
+        if max(lengths) > max_length: return None
+
+        for word in words_to_insert:
+            add_word(xword, word)
+        
+        for word in words_to_insert:
+            if not word in xword.getWords():
+                return None
+        return xword
+            
+def generate_grid(rows=15, cols=15, seed=None, black_fraction=0.2, max_length=12, words_to_insert=[]):
+    while True:
+        xword = _generate_grid(rows, cols, seed, black_fraction, max_length, words_to_insert)
+        if xword is not None:
+            break
+    grid = xword.getGrid()
+    grid = [[char.lower() for char in row] for row in grid]
+    
+    return grid, xword
+
+def add_word(xword, word):
+    indicies = []
+    for i, across_word in enumerate(xword.getAcrosses()):
+        if len(across_word) == len(word):
+            indicies.append(i)
+    if len(indicies) > 0:
+        idx = random.choice(indicies)
+        xword.addAcross(idx, word)
 
 if __name__=="__main__":
-    while True:
-        grid = generate_crossword_template(rows=15, cols=15, seed=None, black_fraction=0.2)
+    grid, xword = generate_grid(rows=15, cols=15, seed=None, black_fraction=0.2, max_length=12, 
+                                words_to_insert=["lauren", "tarini", "derek"])
 
 
-        xword = Crossword(15, 15, grid)
-        
-        lengths = [len(x) for x in xword.getAcrosses()] + [len(x) for x in xword.getDowns()]
-        if max(lengths)< 12:
-            xword.draw_crossword()
-            print(min(lengths), max(lengths), sum(lengths)/len(lengths))
-            print(xword)
-            break
+    xword.draw_crossword()
