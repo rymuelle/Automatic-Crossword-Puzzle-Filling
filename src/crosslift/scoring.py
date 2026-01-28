@@ -35,7 +35,7 @@ def open_local_list(wordlist_file, min_score=90):
                     word_dict[line] = 100.
         return word_dict
 
-def score_word(word, score_list_dict, sentiment = None, score_function = lambda x: math.exp(min((x,100)) / 1)):
+def score_word(word, score_list_dict, sentiment = None, score_function = lambda x: math.exp(min((x,100)) / 0.5)):
     if sentiment is not None:
         from src.crosslift.sentiment import sentiment_score_word
         sentiment_score = sentiment_score_word(word, sentiment)

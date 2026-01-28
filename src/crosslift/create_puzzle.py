@@ -1,7 +1,8 @@
 import argparse
 import random
-import copy
 import sys
+from pathlib import Path
+import os
 
 # Standard Crosslift imports
 from crosslift.crossword import Crossword
@@ -9,6 +10,9 @@ from crosslift.timer import Timer
 from crosslift.ConstructionAlgorithm import IntelligentLookahead, combine_word_lists, open_dict
 from crosslift.scoring import score_xword, score_xword_geometric, open_local_list
 from crosslift.generate_grid import generate_grid
+from crosslift.read_write import write_grid
+
+file_template = "grid = [\n{}\n]"
 
 def run_construction(args):
     """Main logic for puzzle generation."""
@@ -39,7 +43,7 @@ def run_construction(args):
         words_to_insert = random.sample(key_word_list, min(len(key_word_list), args.n_words))
         
         # Generate the initial black square layout
-        test_grid, _ = generate_grid(
+        test_grid, orig_xword = generate_grid(
             rows=args.rows, 
             cols=args.cols, 
             seed=None, 
@@ -49,10 +53,7 @@ def run_construction(args):
         )
 
         if test_grid is None:
-            continue
-
-        orig_grid = copy.deepcopy(test_grid)
-        
+            continue        
         # Attempt to fill the grid with words
         print(f"Attempt {attempt}: Filling grid...")
         result, xword = IntelligentLookahead.construct(
@@ -76,7 +77,10 @@ def run_construction(args):
             print(f"\nFinal Score (Linear): {s_linear}")
             print(f"Final Score (Geometric): {s_geom}")
             print(f"Inserted Seed Words: {', '.join(words_to_insert)}")
-            
+
+            os.makedirs(args.outdir, exist_ok=True)
+            write_grid(xword.getGrid(), Path(args.outdir, "filled_grid.txt"))
+            write_grid(orig_xword.grid, Path(args.outdir, "empty_grid.txt"))
             break
         else:
             print("FAILED. Retrying...")
@@ -98,6 +102,8 @@ def main():
     # File Paths
     parser.add_argument("--wordlist", type=str, default="xwordlist.dict", help="Main dictionary file")
     parser.add_argument("--seedlist", type=str, default="pokemon.txt", help="Seed words file (e.g. pokemon.txt)")
+
+    parser.add_argument("--outdir", type=str, default="out", help="File to save result to.")
 
     args = parser.parse_args()
     run_construction(args)

@@ -10,3 +10,7 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 where = ["src"] 
+
+
+[project.scripts]
+crosslift-create = "crosslift.create_puzzle:main"
