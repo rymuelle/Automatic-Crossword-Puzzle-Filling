@@ -388,6 +388,30 @@ class Crossword:
         json_return = json.dumps(json_return)
         return json_return
 
+    def get_puz_word_list(self):
+        H, W = self.get_dims()  
+        json_string = self.exportAsJSON()
+        answer_dict = json.loads(json_string)
+        def get_word(row, col, orientation):
+            for entry in answer_dict:
+                if entry['row'] == row and entry['col'] == col and entry['orientation'] == orientation:
+                    return entry['word']
+            return None
+
+        word_list = []
+        for r in range(H):
+            for c in range(W):
+                accross_word = get_word(r, c, 'A')
+                down_word = get_word(r, c, 'D')
+                if accross_word is not None:
+                    word_list.append(accross_word)
+                if down_word is not None:
+                    word_list.append(down_word)
+        return word_list
+
+    def get_dims(self):
+        return (self.rows, self.cols)
+    
     # Print function will call this
     def __str__(self):
         ret_str = ""
