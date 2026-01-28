@@ -3,9 +3,10 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "crosslift"  # This is what you will 'import'
+name = "crosslift" 
 version = "0.1.0"
 dependencies = [
+    "puzpy",
 ]
 
 [tool.setuptools.packages.find]
@@ -15,3 +16,4 @@ where = ["src"]
 [project.scripts]
 crosslift-create = "crosslift.create_puzzle:main"
 crosslift-clues = "crosslift.make_clues:main"
+crosslift-puz = "crosslift.save_puzzle:main"
