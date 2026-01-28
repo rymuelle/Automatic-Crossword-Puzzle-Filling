@@ -1,6 +1,7 @@
 import random
 from utils import draw_crossword
 from crossword import Crossword
+import time
 
 def generate_crossword_template(
     rows=10,
@@ -92,8 +93,11 @@ def _generate_grid(rows=15, cols=15, seed=None, black_fraction=0.2, max_length=1
                 return None
         return xword
             
-def generate_grid(rows=15, cols=15, seed=None, black_fraction=0.2, max_length=12, words_to_insert=[]):
+def generate_grid(rows=15, cols=15, seed=None, black_fraction=0.2, max_length=12, words_to_insert=[], max_time=0.1):
+    start_time = time.time()
     while True:
+        if time.time() - start_time > max_time:
+            return None, None
         xword = _generate_grid(rows, cols, seed, black_fraction, max_length, words_to_insert)
         if xword is not None:
             break
@@ -106,10 +110,18 @@ def add_word(xword, word):
     indicies = []
     for i, across_word in enumerate(xword.getAcrosses()):
         if len(across_word) == len(word):
-            indicies.append(i)
+            indicies.append((i, 'A'))
+    for i, down_word in enumerate(xword.getDowns()):
+        if len(down_word) == len(word):
+            indicies.append((i, 'D'))
+
     if len(indicies) > 0:
         idx = random.choice(indicies)
-        xword.addAcross(idx, word)
+        i, direction = idx
+        if direction=="A":
+            xword.addAcross(i, word)
+        else:
+            xword.addWord(idx, word)
 
 if __name__=="__main__":
     grid, xword = generate_grid(rows=15, cols=15, seed=None, black_fraction=0.2, max_length=12, 
