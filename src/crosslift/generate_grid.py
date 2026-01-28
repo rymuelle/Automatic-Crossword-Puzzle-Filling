@@ -1,6 +1,6 @@
 import random
-from utils import draw_crossword
-from crossword import Crossword
+from crosslift.utils import draw_crossword
+from crosslift.crossword import Crossword
 import time
 
 def generate_crossword_template(

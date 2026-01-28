@@ -1,6 +1,6 @@
 # Imports
 import json
-from construction_algorithm import *
+from src.crosslift.ConstructionAlgorithm import *
 
 # Import Flask
 from flask import Flask, render_template, request

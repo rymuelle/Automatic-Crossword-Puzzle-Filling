@@ -1,5 +1,5 @@
 
-from crossword import Crossword
+from src.crosslift.crossword import Crossword
 import puz
 
 puzzle= [

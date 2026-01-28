@@ -1,5 +1,5 @@
-from ConstructionAlgorithm import ConstructionAlgorithm
-from crossword import Crossword
+from src.crosslift.ConstructionAlgorithm import ConstructionAlgorithm
+from src.crosslift.crossword import Crossword
 
 class BruteForceByChar(ConstructionAlgorithm):
 

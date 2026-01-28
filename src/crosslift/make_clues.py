@@ -1,5 +1,5 @@
-from crossword import Crossword
-from read_clues import read_clue_csv
+from src.crosslift.crossword import Crossword
+from src.crosslift.read_clues import read_clue_csv
 import json
 
 grid = [

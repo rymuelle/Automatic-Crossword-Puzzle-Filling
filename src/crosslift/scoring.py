@@ -12,15 +12,32 @@ def open_dict(wordlist_file, min_score=90):
     with open(pathname + 'wordlists/' + wordlist_file) as my_file:
         for line in my_file:
             line = line.strip()
-            word, score = line.split(';')
-            if float(score) >= min_score:
-                word_score_dict[word] = float(score)
+            split = line.split(';')
+            if len(split) == 2:
+                word, score = split
+                if float(score) >= min_score:
+                    word_score_dict[word] = float(score)
+            else:
+                word_score_dict[word] = 100.
         return word_score_dict
-    
+
+def open_local_list(wordlist_file, min_score=90):
+    word_dict = {}
+    with open(wordlist_file) as my_file:
+        for line in my_file:
+                line = line.strip()
+                split = line.split(';')
+                if len(split) == 2:
+                    word, score = split
+                    if float(score) >= min_score:
+                        word_dict[word] = float(score)
+                else:
+                    word_dict[line] = 100.
+        return word_dict
 
 def score_word(word, score_list_dict, sentiment = None, score_function = lambda x: math.exp(min((x,100)) / 1)):
     if sentiment is not None:
-        from sentiment import sentiment_score_word
+        from src.crosslift.sentiment import sentiment_score_word
         sentiment_score = sentiment_score_word(word, sentiment)
     else:
         sentiment_score = 1

@@ -1,9 +1,9 @@
-from crossword import Crossword
+from crosslift.crossword import Crossword
 from abc import ABC, abstractmethod
 import time
 import random
 
-from scoring import *
+from crosslift.scoring import *
 # Get current pathname
 import os
 pathname = os.path.dirname(os.path.abspath(__file__)) + "/"
@@ -19,10 +19,6 @@ class ConstructionAlgorithm(ABC):
     def checkValid(crossword, word_list):
         pass
 
-    @staticmethod
-    @abstractmethod
-    def readWordList(word_list_file):
-        pass
 
 
 class IntelligentLookahead(ConstructionAlgorithm):

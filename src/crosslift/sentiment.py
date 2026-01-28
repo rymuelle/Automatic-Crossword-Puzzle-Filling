@@ -1,6 +1,6 @@
 from sentence_transformers import SentenceTransformer
 import numpy as np
-from scoring import *
+from src.crosslift.scoring import *
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
@@ -40,7 +40,7 @@ def self_sentiment_score(words):
     return mean, geo_mean, similarity
 
 
-from scoring import *
+from src.crosslift.scoring import *
 from tqdm import tqdm
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 import json
-from timer import Timer
-from utils import draw_crossword
+from crosslift.timer import Timer
+from crosslift.utils import draw_crossword
 
 class Crossword:
     # Constructor
