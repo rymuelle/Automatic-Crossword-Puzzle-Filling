@@ -103,7 +103,7 @@ def main():
     parser.add_argument("--wordlist", type=str, default="xwordlist.dict", help="Main dictionary file")
     parser.add_argument("--seedlist", type=str, default="pokemon.txt", help="Seed words file (e.g. pokemon.txt)")
 
-    parser.add_argument("--outdir", type=str, default="out", help="File to save result to.")
+    parser.add_argument("--outdir", type=str, default="out", help="Dir to save result to.")
 
     args = parser.parse_args()
     run_construction(args)
