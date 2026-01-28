@@ -1,5 +1,5 @@
 from crossword import Crossword
-from read_clues import make_clue_dict
+from read_clues import read_clue_csv
 import json
 
 grid = [
@@ -41,7 +41,7 @@ xword.draw_crossword()
 
 word_list = xword.get_puz_word_list()
 
-clue_dict = make_clue_dict()
+clue_dict = read_clue_csv()
 
 for word in word_list:
     if word.upper() in clue_dict:
