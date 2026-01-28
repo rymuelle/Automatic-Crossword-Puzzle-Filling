@@ -1,8 +1,12 @@
 # loop over '/Users/ryanmueller/Downloads/xd/clues.tsv'
 # https://xd.saul.pw/data
-def make_clue_dict():
+import os
+
+pathname = os.path.dirname(os.path.abspath(__file__)) + "/"
+
+def make_clue_dict(file='wordlists/clues.tsv'):
     clue_dict = {}
-    with open('wordlists/clues.tsv', 'r') as f:
+    with open(pathname + file, 'r') as f:
         for line in f:
             parts = line.strip().split('\t')
             if len(parts) >= 4:
@@ -26,7 +30,7 @@ def make_clue_dict():
 
 def read_clue_csv():
     clue_dict = {}
-    with open('wordlists/clues.csv', 'r') as f:
+    with open(pathname + 'wordlists/clues.csv', 'r') as f:
         for line in f:
             parts = line.strip().split(',')
             if len(parts) >= 4:
@@ -47,8 +51,9 @@ def read_clue_csv():
     return clue_dict
 
 if __name__ == "__main__":
-    import pandas as pd
+    # import pandas as pd
     clue_dict = make_clue_dict()
-    df = pd.DataFrame.from_dict(clue_dict, orient='index', columns=['clue', 'year', 'pub'])
-    df.to_csv("wordlists/clues.csv")
-    print(df.year.mean())
+    with open(pathname + 'wordlists/clues_short.tsv', 'w') as f:
+        for answer, (clue, year, pub) in clue_dict.items():
+            f.write('{}\t{}\t{}\t{}\n'.format(pub, year, answer, clue))
+

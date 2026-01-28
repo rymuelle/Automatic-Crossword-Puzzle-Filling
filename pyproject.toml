@@ -14,3 +14,4 @@ where = ["src"]
 
 [project.scripts]
 crosslift-create = "crosslift.create_puzzle:main"
+crosslift-clues = "crosslift.make_clues:main"

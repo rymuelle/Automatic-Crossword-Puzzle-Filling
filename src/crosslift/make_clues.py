@@ -1,51 +1,39 @@
-from src.crosslift.crossword import Crossword
-from src.crosslift.read_clues import read_clue_csv
-import json
+from crosslift.crossword import Crossword
+from crosslift.read_clues import make_clue_dict
+from crosslift.read_write import read_grid
+import argparse
+from pathlib import Path
 
-grid = [
-['P', 'D', 'T', '.', '.', 'S', 'H', 'U', 'I', '.', '.', '.'],
-['H', 'O', 'R', 'S', 'E', 'L', 'A', 'N', 'D', '.', '.', '.'],
-['U', 'R', 'A', 'N', 'I', 'A', 'N', 'M', 'O', 'O', 'N', 'S'],
-['B', 'E', 'L', 'L', 'S', '.', '.', '.', '.', 'L', 'Y', 'N'],
-['S', 'M', 'A', '.', '.', 'R', 'A', 'C', 'H', 'A', 'E', 'L'],
-['.', 'I', 'S', 'A', 'B', 'E', 'L', 'L', 'E', '.', '.', '.'],
-['.', '.', '.', 'B', 'L', 'A', 'T', 'H', 'E', 'R', 'S', '.'],
-['O', 'N', 'C', 'E', 'T', 'O', 'O', '.', '.', 'E', 'T', 'H'],
-['M', 'Y', 'B', '.', '.', '.', '.', 'K', 'A', 'T', 'I', 'E'],
-['W', 'E', 'I', 'G', 'H', 'H', 'E', 'A', 'V', 'I', 'L', 'Y'],
-['.', '.', '.', 'N', 'O', 'O', 'K', 'M', 'I', 'L', 'E', 'S'],
-['.', '.', '.', 'P', 'A', 'C', 'E', '.', '.', 'L', 'T', 'E'], 
-]
+def make_clues(args):
+    grid = read_grid(Path(args.outdir, "filled_grid.txt"))
+    
+    H, W = len(grid), len(grid[0])
+    xword = Crossword(H, W, optional_grid=grid)
+    xword.draw_crossword()
+
+    word_list = xword.get_puz_word_list()
+
+    clue_dict = make_clue_dict(file='wordlists/clues_short.tsv')
+    with open(Path(args.outdir, "clues.txt"), 'w') as f:
+        for word in word_list:
+            if word.upper() in clue_dict and args.make_clues:
+                clue = clue_dict[word.upper()][0]
+            else:
+                clue = word
+            f.write(clue +'\n')
 
 
-grid=[
-['.', '.', 'R', 'E', 'O', '.', 'U', 'M', 'P', '.', '.', 'E', 'D', 'G', 'Y'],
-['.', 'T', 'A', 'S', 'K', '.', 'P', 'R', 'O', 'P', 'A', 'T', 'R', 'I', 'A'],
-['S', 'U', 'B', 'T', 'R', 'A', 'C', 'T', 'I', 'O', 'N', 'S', 'I', 'G', 'N'],
-['I', 'N', 'S', 'E', 'A', 'M', '.', '.', 'R', 'O', 'Y', '.', 'Z', 'A', 'G'],
-['R', 'A', 'C', 'E', '.', 'P', 'R', 'O', 'O', 'F', '.', 'S', 'Z', 'A', '.'],
-['.', '.', 'A', 'M', 'P', '.', 'E', 'N', 'T', '.', 'C', 'H', 'I', 'M', 'P'],
-['.', '.', '.', 'S', 'U', 'E', 'D', 'E', '.', 'P', 'H', 'E', 'L', 'P', 'S'],
-['A', 'C', 'E', '.', 'G', 'A', 'S', '.', 'S', 'E', 'E', '.', 'E', 'S', 'T'],
-['H', 'O', 'L', 'D', 'E', 'R', '.', 'T', 'A', 'P', 'E', 'D', '.', '.', '.'],
-['A', 'T', 'B', 'A', 'T', '.', 'A', 'W', 'W', '.', 'R', 'R', 'S', '.', '.'],
-['.', 'T', 'R', 'Y', '.', 'B', 'L', 'A', 'K', 'E', '.', 'U', 'H', 'O', 'H'],
-['K', 'O', 'I', '.', 'V', 'A', 'L', '.', '.', 'M', 'R', 'M', 'I', 'M', 'E'],
-['A', 'N', 'D', 'R', 'E', 'L', 'E', 'O', 'N', 'T', 'A', 'L', 'L', 'E', 'Y'],
-['R', 'E', 'G', 'I', 'G', 'I', 'G', 'A', 'S', '.', 'K', 'I', 'L', 'N', '.'],
-['T', 'E', 'E', 'M', '.', '.', 'E', 'T', 'A', '.', 'E', 'N', 'S', '.', '.'], 
-]
-H, W = len(grid), len(grid[0])
-xword = Crossword(H, W, optional_grid=grid)
-xword.draw_crossword()
 
-word_list = xword.get_puz_word_list()
 
-clue_dict = read_clue_csv()
+def main():
+    parser = argparse.ArgumentParser(description="Crosslift Command Line Puzzle Generator Clue Formater")
+    
+    parser.add_argument("--make_clues",  action="store_true", help="Input previous clues where possible.")
 
-for word in word_list:
-    if word.upper() in clue_dict:
-        clue = clue_dict[word.upper()][0]
-    else:
-        clue = word
-    print(f' """{clue}""", ')
+    parser.add_argument("--outdir", type=str, default="out", help="Dir to save result to.")
+
+    args = parser.parse_args()
+    make_clues(args)
+
+if __name__ == "__main__":
+    main()
