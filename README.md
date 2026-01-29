@@ -34,6 +34,7 @@ crosslift-create --rows 15 --cols 15 --seedlist pokemon.txt --outdir ./my_puzzle
 
 This will provide both a filled in puzzle, and a blank template puzzle with only the inserted words for manual creation.
 
+
 2. Format Clues (crosslift-clues)
 
 Process the generated words into a format ready for cluing.
@@ -62,3 +63,7 @@ https://crosshare.org/crosswords/QQMmFnZ2oKKGRS22DAJW/gotta-solve-em-all
 ## With thanks to:
 
 The original author of the repository (https://github.com/MichaelWehar/Automatic-Crossword-Puzzle-Filling).
+
+Clue database: https://xd.saul.pw/data
+
+Wordlist: https://www.alexboisvert.com/xwordlist/;0
