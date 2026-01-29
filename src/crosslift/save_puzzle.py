@@ -7,10 +7,8 @@ import argparse
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Crosslift Command Line Puzzle Generator Clue Formater")
+    parser = argparse.ArgumentParser(description="Crosslift Command Line Puzzle Generator: Saving as a .puz")
     
-    parser.add_argument("--make_clues",  action="store_true", help="Input previous clues where possible.")
-
     parser.add_argument("--outdir", type=str, default="out", help="Dir to save result to.")
     parser.add_argument("--title", type=str, default="My Puzzle", help="Title of Puzzle")
     parser.add_argument("--name", type=str, default="Ryan Mueller", help="Puzzle creator name.")

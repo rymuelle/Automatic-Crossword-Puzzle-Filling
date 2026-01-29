@@ -38,17 +38,20 @@ def run_construction(args):
     attempt = 0
     while True:
         attempt += 1
-        
+        word_list_dict, word_score_dict = combine_word_lists(
+                    [args.wordlist], 
+                    [1], 
+                    min_score=args.min_score
+                )
         # Select random words to force into the grid
         words_to_insert = random.sample(key_word_list, min(len(key_word_list), args.n_words))
-        
         # Generate the initial black square layout
         test_grid, orig_xword = generate_grid(
             rows=args.rows, 
             cols=args.cols, 
             seed=None, 
             black_fraction=args.black_fraction, 
-            max_length=12, 
+            max_length=args.max_word, 
             words_to_insert=words_to_insert
         )
 
@@ -93,6 +96,7 @@ def main():
     # Grid Dimensions
     parser.add_argument("--rows", type=int, default=15, help="Number of rows (default: 15)")
     parser.add_argument("--cols", type=int, default=15, help="Number of columns (default: 15)")
+    parser.add_argument("--max_word", type=int, default=15, help="Max_length_of_word")
     
     # Generation Parameters
     parser.add_argument("--n_words", type=int, default=5, help="Number of seed words to force (default: 5)")

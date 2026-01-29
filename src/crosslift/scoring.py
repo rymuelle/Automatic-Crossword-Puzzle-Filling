@@ -29,9 +29,11 @@ def open_local_list(wordlist_file, min_score=90):
                 split = line.split(';')
                 if len(split) == 2:
                     word, score = split
+                    word = ''.join(x for x in word if x.isalpha())
                     if float(score) >= min_score:
                         word_dict[word] = float(score)
                 else:
+                    line = ''.join(x for x in line if x.isalpha())
                     word_dict[line] = 100.
         return word_dict
 
