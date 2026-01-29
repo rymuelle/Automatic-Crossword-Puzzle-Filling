@@ -1,27 +1,62 @@
-# Automatic Crossword Puzzle Filling - Open Source
-## Introduction
-A **crossword layout** is a two-dimensional grid that describes where the answers are located.  These answers are to be placed in horizontal and vertical blocks of contiguous empty cells.  The goal of this project is to develop an algorithm that takes in a crossword layout along with a word list and fills all such blocks with valid words.  This is an essential task when constructing a crossword puzzle.  Therefore, we call it the **Crossword Puzzle Construction Problem (CPCP)**.
+# Crosslift
 
-## Summer Research (Summer 2020)
-During summer of 2020 Otis Peterson worked with Professor Michael Wehar at Swarthmore College on solving the crossword puzzle construction problem. In particular, we implemented our own heuristic algorithms (based on established approaches) to provide a web-based crossword construction application. Otis presented this work at the National Conference on Undergraduate Research (NCUR 2021).  See our accepted abstract and an explanation of our implementation @ [crosswordconstruction.com](https://www.crosswordconstruction.com)
+Crosslift is a suite of command-line tools designed to automate the creation, clue generation, and formatting of crossword puzzles. 
 
-## Getting Started and Usage
-The code in this repo is a self-contained demonstration of our original implementation.  You can simply use python to run the `test_crossword.py` file to test our algorithm on an example 5 by 5 crossword layout.  Or, you can install [flask](https://flask.palletsprojects.com/en/stable/) and run the `flask_app.py` file.  Then, you can navigate to the local host url in your web browser to generate crossword puzzles using our demonstration UI.  Alternatively, you can try out our algorithm @ [crosswordconstruction.com](https://www.crosswordconstruction.com/generator)
+## Features
 
-We included a sample word list of 100,000 suggested English words.  We encourage you to add your own word lists.  You can simple create files `wordlists/your_word_list.txt` or `wordlists/your_other_word_list.txt` to test our implementation with your own word lists.
+1. Customizable Grids: Adjust dimensions and black square density.
 
-## License
-- MIT
+2. Themed Generation: Force specific "seed" words into your puzzle.
 
-## Credits
-- Michael Wehar
-- Otis Peterson
+3. Automated Cluing: Format and manage clues for your generated grids.
 
-## Libraries
-- Our UI demo uses [Bootstrap](https://getbootstrap.com).
+4. Industry Standard Output: Export your finished puzzles to the .puz format.
 
-## References and Links
-- [Abstract](https://www.crosswordconstruction.com/static/files/abstract.pdf) and [Poster](https://www.crosswordconstruction.com/static/files/poster.pdf) presented at NCUR 2021
-- [Live Demo @ crosswordconstruction.com](https://www.crosswordconstruction.com/generator)
-- [Previous Project on Generating Crossword Puzzle Layouts](https://github.com/MichaelWehar/Crossword-Layout-Generator)
-- [Blog Post on Generating Crosswords](https://www.aiplusinfo.com/blog/ai-generated-crossword-puzzles/)
+## Installation
+
+To use Crosslift, ensure you have Python installed, then clone this repository and install the dependencies:
+Bash
+
+git clone https://github.com/yourusername/crosslift.git
+cd crosslift
+pip install .
+
+## Usage Guide
+
+Crosslift is split into three main commands that follow the natural workflow of puzzle creation.
+1. Create the Grid (crosslift-create)
+
+Generate the physical layout and fill the words based on your dictionary.
+
+```bash
+crosslift-create --rows 15 --cols 15 --seedlist pokemon.txt --outdir ./my_puzzle --n_words 5
+```
+
+This will provide both a filled in puzzle, and a blank template puzzle with only the inserted words for manual creation.
+
+2. Format Clues (crosslift-clues)
+
+Process the generated words into a format ready for cluing.
+
+```bash
+crosslift-clues --make_clues --outdir ./my_puzzle
+```
+
+    --make_clues: Attempts to pull in previous/existing clues where possible.
+
+If it is not possible to fill in a clue, the original word will be left in it's place. You may edit the text document (my_puzzle/cules.txt) to change the clues.
+
+3. Export to .puz (crosslift-puz)
+
+Finalize your puzzle into the standard .puz format used by most crossword software and players.
+
+```bash
+crosslift-puz --title "Gotta Solve 'Em All" --name "Ryan Mueller" --outdir ./my_puzzle
+```
+
+## Example puzzle generated:
+
+https://crosshare.org/crosswords/QQMmFnZ2oKKGRS22DAJW/gotta-solve-em-all
+
+
+## With thanks to 
