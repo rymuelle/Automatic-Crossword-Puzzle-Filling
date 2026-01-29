@@ -59,4 +59,6 @@ crosslift-puz --title "Gotta Solve 'Em All" --name "Ryan Mueller" --outdir ./my_
 https://crosshare.org/crosswords/QQMmFnZ2oKKGRS22DAJW/gotta-solve-em-all
 
 
-## With thanks to 
+## With thanks to:
+
+The original author of the repository (https://github.com/MichaelWehar/Automatic-Crossword-Puzzle-Filling).
