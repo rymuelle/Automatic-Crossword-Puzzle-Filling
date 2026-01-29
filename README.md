@@ -40,12 +40,10 @@ This will provide both a filled in puzzle, and a blank template puzzle with only
 Process the generated words into a format ready for cluing.
 
 ```bash
-crosslift-clues --make_clues --outdir ./my_puzzle
+crosslift-clues --outdir ./my_puzzle
 ```
 
-    --make_clues: Attempts to pull in previous/existing clues where possible.
-
-If it is not possible to fill in a clue, the original word will be left in it's place. You may edit the text document (my_puzzle/cules.txt) to change the clues.
+This will generate a text file in the output dir of each word. Overwrite the word with your clue prior to exporting to .puz
 
 3. Export to .puz (crosslift-puz)
 
