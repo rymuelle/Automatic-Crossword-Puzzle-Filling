@@ -451,7 +451,7 @@ class Crossword:
         n_choose = round(len(self.getWords()) * word_percentage)
         for i, direction, word in random.sample(words, k=n_choose):  
                 h, w = self.word_index_to_coords[(i, direction)]
-                empty_xword.add_word_by_coord(empty_xword, h, w, direction, word)
+                empty_xword.add_word_by_coord(h, w, direction, word)
         
         # Sample blacks
         blacks = []
