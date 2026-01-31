@@ -1,6 +1,7 @@
 import json
 from crosslift.timer import Timer
 from crosslift.utils import draw_crossword
+import random
 
 class Crossword:
     # Constructor
@@ -424,3 +425,41 @@ class Crossword:
     
     def draw_crossword(self):
         draw_crossword(self.grid)
+
+
+    def add_word_by_coord(self, h, w, direction, word):
+        if direction=="A":
+            for char in word:
+                self.grid[h][w] = char
+                w += 1
+        else:
+            for char in word:
+                self.grid[h][w] = char
+                h += 1
+
+    def random_sample(self, word_percentage = .5, black_percentage = .5):
+        H, W = len(self.grid), len(self.grid[0])
+        empty_xword = Crossword(H, W)
+
+        # Sample words
+        words = []
+        for i, across_word in enumerate(self.getAcrosses()):
+            words.append((i, 'A', across_word))
+        for i, down_word in enumerate(self.getDowns()):
+            words.append((i, 'D', down_word))
+
+        n_choose = round(len(self.getWords()) * word_percentage)
+        for i, direction, word in random.sample(words, k=n_choose):  
+                h, w = self.word_index_to_coords[(i, direction)]
+                empty_xword.add_word_by_coord(empty_xword, h, w, direction, word)
+        
+        # Sample blacks
+        blacks = []
+        for h, row in enumerate(self.grid):
+            for w, char in enumerate(row):
+                if char == ".": blacks.append((h, w))
+
+        n_choose = round(len(blacks) * black_percentage)
+        for h, w in random.sample(blacks, k=n_choose):
+            empty_xword.grid[h][w] = '.'
+        return empty_xword
