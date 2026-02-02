@@ -32,6 +32,12 @@ class Crossword:
         # TODO make this build position_dict too
         self._buildIndexes()
 
+    def update_from_grid(self):
+        self._loadAcrosses()
+        self._loadDowns()
+        self._buildPositions()
+        self._buildIndexes()
+
     # Private Methods
     def _buildGrid(self, rows, cols, optional_grid):
         grid = []
@@ -463,3 +469,13 @@ class Crossword:
         for h, w in random.sample(blacks, k=n_choose):
             empty_xword.grid[h][w] = '.'
         return empty_xword
+    
+    def make_word_index_grid(self):
+        pos_index = self.getPositionIndexDict()
+        h, w = self.get_dims()
+        acrosses = [[-1 for _ in range(w)] for _ in range(h)]
+        downs = [[-1 for _ in range(w)] for _ in range(h)]
+        for (h, w, direc), (wi, ci) in pos_index.items():
+            if direc == "A": acrosses[h][w] = wi
+            if direc == "D": downs[h][w] = wi
+        return acrosses, downs
