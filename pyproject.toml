@@ -13,6 +13,10 @@ dependencies = [
 where = ["src"] 
 
 
+[tool.setuptools.package-data]
+"crosslift.wordlists" = ["*.dict"]
+
+
 [project.scripts]
 crosslift-create = "crosslift.create_puzzle:main"
 crosslift-clues = "crosslift.make_clues:main"
