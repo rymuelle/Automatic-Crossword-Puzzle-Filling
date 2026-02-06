@@ -1,15 +1,17 @@
 
 import os
 import math
-
-pathname = os.path.dirname(os.path.abspath(__file__)) + "/"
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent
+# pathname = os.path.dirname(os.path.abspath(__file__)) + "/"
 
 def logistic_function(x, scale=1, mean=0.5):
     return 1 / (1 + 10**(-(x-mean)*scale))
 
 def open_dict(wordlist_file, min_score=90):
     word_score_dict = {}
-    with open(pathname + 'wordlists/' + wordlist_file) as my_file:
+    file_path = BASE_DIR / "wordlists" / wordlist_file
+    with open(file_path) as my_file:
         for line in my_file:
             line = line.strip()
             split = line.split(';')
