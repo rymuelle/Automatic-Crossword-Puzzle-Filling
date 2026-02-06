@@ -1,8 +1,8 @@
 
 import os
 import math
-from pathlib import Path
-BASE_DIR = Path(__file__).resolve().parent
+import importlib.resources as pkg_resources
+from . import wordlists  
 # pathname = os.path.dirname(os.path.abspath(__file__)) + "/"
 
 def logistic_function(x, scale=1, mean=0.5):
@@ -10,8 +10,8 @@ def logistic_function(x, scale=1, mean=0.5):
 
 def open_dict(wordlist_file, min_score=90):
     word_score_dict = {}
-    file_path = BASE_DIR / "wordlists" / wordlist_file
-    with open(file_path) as my_file:
+    resource_path = pkg_resources.files('crosslift.wordlists').joinpath(wordlist_file)
+    with resource_path.open('r', encoding='utf-8') as my_file:
         for line in my_file:
             line = line.strip()
             split = line.split(';')
