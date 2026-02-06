@@ -489,7 +489,6 @@ class Crossword:
             word_choices = [word for word, score in self.wordlist.items() if matcher.match(word)]
             if len(word_choices) == 0: continue
             random_word = random.choice(word_choices)
-            print((word[0], word[1]), random_word)
             self.addWord( (word[0], word[1]), random_word)
 
     def make_word_index_grid(self):
