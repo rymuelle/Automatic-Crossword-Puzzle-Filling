@@ -7,7 +7,7 @@ import re
 
 class Crossword:
     # Constructor
-    def __init__(self, rows, cols, optional_grid = []):
+    def __init__(self, rows, cols, optional_grid = [], wordlist=None):
         self.rows = rows
         self.cols = cols
         self.grid = self._buildGrid(rows, cols, optional_grid)
@@ -33,7 +33,7 @@ class Crossword:
         # build position_index_dict and word_index_to_coords
         # TODO make this build position_dict too
         self._buildIndexes()
-        self.wordlist = open_dict('xwordlist.dict', min_score=50)
+        self.wordlist = wordlist
 
     def update_from_grid(self):
         self._loadAcrosses()
