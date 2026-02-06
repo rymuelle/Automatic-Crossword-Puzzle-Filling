@@ -2,6 +2,8 @@ import json
 from crosslift.timer import Timer
 from crosslift.utils import draw_crossword
 import random
+from crosslift.scoring import open_dict
+import re
 
 class Crossword:
     # Constructor
@@ -31,6 +33,7 @@ class Crossword:
         # build position_index_dict and word_index_to_coords
         # TODO make this build position_dict too
         self._buildIndexes()
+        self.wordlist = open_dict('xwordlist.dict', min_score=50)
 
     def update_from_grid(self):
         self._loadAcrosses()
@@ -469,7 +472,26 @@ class Crossword:
         for h, w in random.sample(blacks, k=n_choose):
             empty_xword.grid[h][w] = '.'
         return empty_xword
-    
+
+    def insert_random_word(self):
+        words = []
+        for i , word in enumerate(self.getAcrosses()):
+            if ' ' in word: 
+                words.append((i, "A", word))
+        for i , word in enumerate(self.getDowns()):
+            if ' ' in word: 
+                words.append((i, "D", word))
+        words = random.sample(words, k=1)
+        
+        for word in words:
+            target = word[2].replace(' ', '.')
+            matcher = re.compile(f'^{target}$', flags=0)
+            word_choices = [word for word, score in self.wordlist.items() if matcher.match(word)]
+            if len(word_choices) == 0: continue
+            random_word = random.choice(word_choices)
+            print((word[0], word[1]), random_word)
+            self.addWord( (word[0], word[1]), random_word)
+
     def make_word_index_grid(self):
         pos_index = self.getPositionIndexDict()
         h, w = self.get_dims()
